@@ -84,7 +84,33 @@ void Sort<T>::SelectSort(vector<T>& data)
 template<typename T>
 void Sort<T>::QuickSort(vector<T>& data, int startindex, int endindex)
 {
+    int pivotvalue = data[endindex];
 
+    int i = startindex;
+    int j = endindex - 1;
+    if (startindex >= endindex)
+        return;
+
+    while(i < j)
+    {
+        while(data[i] < pivotvalue)
+        {
+            i++;
+        }
+        while(data[j] > pivotvalue)
+        {
+            j--;
+        }
+        if(i >= j )
+        {
+            break;
+        }
+        std::swap(data[i], data[j]);
+    }
+    int midindex = (i + j) / 2;
+    std::swap(data[midindex], data[endindex]);
+    QuickSort(data, startindex, midindex - 1);
+    QuickSort(data, midindex + 1, endindex);
 }
 
 int main()
@@ -121,6 +147,15 @@ int main()
     objsort.InsertSort(vdata4);
     cout << "SelectSort:";
     for(vector<int>::const_iterator it = vdata4.begin(); it != vdata4.end(); it++)
+    {
+        cout << *it << ' ';
+    }
+    cout << endl;
+
+    vector<int> vdata5(data, data + sizeof(data) / sizeof(data[0]));
+    objsort.QuickSort(vdata5, 0, vdata5.size() - 1);
+    cout << "QuickSort:";
+    for(vector<int>::const_iterator it = vdata5.begin(); it != vdata5.end(); it++)
     {
         cout << *it << ' ';
     }
