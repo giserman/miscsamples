@@ -12,6 +12,8 @@ class Sort
         void InsertSort(vector<T>& data);
         void SelectSort(vector<T>& data);
         void QuickSort(vector<T>& data, int startindex, int endindex);
+
+        void PrintData(const vector<T>& data);
 };
 
 template<typename T>
@@ -84,20 +86,19 @@ void Sort<T>::SelectSort(vector<T>& data)
 template<typename T>
 void Sort<T>::QuickSort(vector<T>& data, int startindex, int endindex)
 {
-    int pivotvalue = data[endindex];
-
-    int i = startindex;
-    int j = endindex - 1;
     if (startindex >= endindex)
         return;
 
+    int pivotvalue = data[endindex];
+    int i = startindex;
+    int j = endindex - 1;
     while(i < j)
     {
-        while(data[i] < pivotvalue)
+        while(i < j && data[i] <= pivotvalue)
         {
             i++;
         }
-        while(data[j] > pivotvalue)
+        while(i < j && data[j] > pivotvalue)
         {
             j--;
         }
@@ -107,17 +108,38 @@ void Sort<T>::QuickSort(vector<T>& data, int startindex, int endindex)
         }
         std::swap(data[i], data[j]);
     }
-    int midindex = (i + j) / 2;
-    std::swap(data[midindex], data[endindex]);
-    QuickSort(data, startindex, midindex - 1);
-    QuickSort(data, midindex + 1, endindex);
+
+    if(data[j] > data[endindex])
+        std::swap(data[j], data[endindex]);
+
+    //PrintData(data);
+    QuickSort(data, startindex, j - 1);
+    QuickSort(data, j + 1, endindex);
 }
+
+template <typename T>
+void Sort<T>::PrintData(const vector<T>& data)
+{
+    for(vector<int>::const_iterator it = data.begin(); it != data.end(); it++)
+    {
+        cout << *it << ' ';
+    }
+    cout << endl;
+}
+
 
 int main()
 {
     Sort<int> objsort;
-    const int data[] = {1,90,3,19,54,55,6,31,7,9};
+    const int data[] = {1,90,3,19,54,55,6,31,7,9,2,9,19};
     vector<int> vdata(data, data + sizeof(data)/sizeof(data[0]));
+    cout << "source data:";
+    for(vector<int>::const_iterator it = vdata.begin(); it != vdata.end(); it++)
+    {
+        cout << *it << ' ';
+    }
+    cout << endl;
+
     objsort.BubbleSort(vdata);
     for(vector<int>::const_iterator it = vdata.begin(); it != vdata.end(); it++)
     {
