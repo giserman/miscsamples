@@ -4,16 +4,28 @@
 
 using namespace std;
 
+template <typename T>
+void PrintData(const vector<T>& data)
+{
+    for(typename vector<T>::const_iterator it = data.begin(); it != data.end(); it++)
+    {
+        cout << *it << ' ';
+    }
+    cout << endl;
+}
+
 template<typename T>
 class Sort
 {
+    private:
+        int Partition(vector<T>& data, int startindex, int endindex);
     public:
         void BubbleSort(vector<T>& data);
         void InsertSort(vector<T>& data);
         void SelectSort(vector<T>& data);
         void QuickSort(vector<T>& data, int startindex, int endindex);
+        void QuickSort2(vector<T>& data, int startindex, int endindex);
 
-        void PrintData(const vector<T>& data);
 };
 
 template<typename T>
@@ -118,70 +130,72 @@ void Sort<T>::QuickSort(vector<T>& data, int startindex, int endindex)
 }
 
 template <typename T>
-void Sort<T>::PrintData(const vector<T>& data)
+int Sort<T>::Partition(vector<T>& data, int startindex, int endindex)
 {
-    for(vector<int>::const_iterator it = data.begin(); it != data.end(); it++)
+    T pivotvalue = data[endindex];
+    int i = startindex - 1;
+    int j = startindex;
+    for(;j < endindex; j++)
     {
-        cout << *it << ' ';
+        if(data[j] <= pivotvalue)
+        {
+            i = i + 1;
+            std::swap(data[i], data[j]);
+        }
     }
-    cout << endl;
+    std::swap(data[j], data[endindex]);
+    return 1;
 }
+
+template <typename T>
+void Sort<T>::QuickSort2(vector<T>& data, int startindex, int endindex)
+{
+    if(startindex < endindex)
+    {
+        int pivot = Partition(data, startindex, endindex);
+        QuickSort2(data, startindex, pivot - 1);
+        QuickSort2(data, pivot + 1, endindex);
+    }
+}
+
 
 
 int main()
 {
     Sort<int> objsort;
     const int data[] = {1,90,3,19,54,55,6,31,7,9,2,9,19};
+
     vector<int> vdata(data, data + sizeof(data)/sizeof(data[0]));
     cout << "source data:";
-    for(vector<int>::const_iterator it = vdata.begin(); it != vdata.end(); it++)
-    {
-        cout << *it << ' ';
-    }
-    cout << endl;
+    PrintData(vdata);
 
-    objsort.BubbleSort(vdata);
-    for(vector<int>::const_iterator it = vdata.begin(); it != vdata.end(); it++)
-    {
-        cout << *it << ' ';
-    }
-    cout << endl;
+    //objsort.BubbleSort(vdata);
+    //PrintData(vdata);
 
-    vector<int> vdata2 = {5,23,1,4,10,22,54,123,101};
+    //vector<int> vdata2 = {5,23,1,4,10,22,54,123,101};
+    vector<int> vdata2(data, data + sizeof(data)/sizeof(data[0]));
     objsort.BubbleSort(vdata2);
     cout << "bullesort:";
-    for(vector<int>::const_iterator it = vdata2.begin(); it != vdata2.end(); it++)
-    {
-        cout << *it << ' ';
-    }
-    cout << endl;
+    PrintData(vdata2);
 
     vector<int> vdata3(data, data + sizeof(data) / sizeof(data[0]));
     objsort.InsertSort(vdata3);
     cout << "InsertSort:";
-    for(vector<int>::const_iterator it = vdata3.begin(); it != vdata3.end(); it++)
-    {
-        cout << *it << ' ';
-    }
-    cout << endl;
+    PrintData(vdata3);
 
     vector<int> vdata4(data, data + sizeof(data) / sizeof(data[0]));
     objsort.InsertSort(vdata4);
     cout << "SelectSort:";
-    for(vector<int>::const_iterator it = vdata4.begin(); it != vdata4.end(); it++)
-    {
-        cout << *it << ' ';
-    }
-    cout << endl;
+    PrintData(vdata4);
 
     vector<int> vdata5(data, data + sizeof(data) / sizeof(data[0]));
     objsort.QuickSort(vdata5, 0, vdata5.size() - 1);
     cout << "QuickSort:";
-    for(vector<int>::const_iterator it = vdata5.begin(); it != vdata5.end(); it++)
-    {
-        cout << *it << ' ';
-    }
-    cout << endl;
+    PrintData(vdata5);
 
+    vector<int> vdata6(data, data + sizeof(data) / sizeof(data[0]));
+    objsort.QuickSort(vdata6, 0, vdata6.size() - 1);
+    cout << "QuickSort2:";
+    PrintData(vdata6);
     return 1;
 }
